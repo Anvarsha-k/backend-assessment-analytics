@@ -1,80 +1,223 @@
 openapi: 3.0.3
 info:
-  title: Analytics API
+  title: Website Analytics API
   version: "1.0.0"
+  description: |
+    Backend analytics service for collecting events, managing API keys, and generating aggregated insights.
+
 servers:
   - url: http://localhost:5000
+    description: Local development server
+
 paths:
+
+  # -------------------------------
+  # AUTH ROUTES
+  # -------------------------------
+  
   /api/auth/register:
     post:
-      summary: Register a new application and get an API key
+      summary: Register a new application and generate an API key
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
+              required:
+                - name
               properties:
                 name:
                   type: string
+                  example: "My Product Website"
+                ownerEmail:
+                  type: string
+                  example: "user@example.com"
       responses:
         "201":
-          description: Created
+          description: Application registered successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  app:
+                    type: object
+
+  /api/auth/api-key:
+    get:
+      summary: Get the API key for the authenticated app
+      parameters:
+        - in: header
+          name: x-api-key
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns API key
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  apiKey:
+                    type: string
+
+  /api/auth/revoke:
+    post:
+      summary: Revoke an API key to disable access
+      parameters:
+        - in: header
+          name: x-api-key
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+                  example: "Key compromised"
+      responses:
+        "200":
+          description: API key revoked
+
+  # -------------------------------
+  # ANALYTICS ROUTES
+  # -------------------------------
+
   /api/analytics/collect:
     post:
       summary: Collect an analytics event
       parameters:
         - in: header
           name: x-api-key
+          required: true
           schema:
             type: string
-          required: true
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
+              required:
+                - event
+                - url
+                - timestamp
+              properties:
+                event:
+                  type: string
+                  example: "login_button_click"
+                url:
+                  type: string
+                  example: "https://example.com/login"
+                referrer:
+                  type: string
+                  example: "https://google.com"
+                device:
+                  type: string
+                  example: "mobile"
+                timestamp:
+                  type: string
+                  example: "2025-11-14T10:00:00Z"
+                userId:
+                  type: string
+                  example: "user123"
+                ipAddress:
+                  type: string
+                  example: "102.22.44.11"
+                metadata:
+                  type: object
+                  example:
+                    browser: "Chrome"
+                    os: "Android"
+                    screenSize: "1080x1920"
       responses:
         "201":
-          description: Event collected
+          description: Event collected successfully
+
   /api/analytics/event-summary:
     get:
-      summary: Get aggregated event summary
+      summary: Get event summary and aggregated analytics
       parameters:
         - in: header
           name: x-api-key
+          required: true
           schema:
             type: string
-          required: true
         - in: query
           name: event
           schema:
             type: string
+            example: "login_button_click"
         - in: query
           name: startDate
           schema:
             type: string
+            example: "2025-11-10"
         - in: query
           name: endDate
           schema:
             type: string
+            example: "2025-11-14"
+        - in: query
+          name: app_id
+          schema:
+            type: string
+            example: "abc-123"
       responses:
         "200":
-          description: OK
+          description: Event summary retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  event: "login_button_click"
+                  count: 50
+                  uniqueUsers: 18
+                  deviceData:
+                    mobile: 40
+                    desktop: 10
+
   /api/analytics/user-stats:
     get:
-      summary: Get user related stats
+      summary: Get analytics data for a specific user
       parameters:
         - in: header
           name: x-api-key
+          required: true
           schema:
             type: string
-          required: true
         - in: query
           name: userId
+          required: true
           schema:
             type: string
+            example: "user123"
       responses:
         "200":
-          description: OK
+          description: User stats retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  userId: "user123"
+                  totalEvents: 12
+                  deviceDetails:
+                    browser: "Chrome"
+                    os: "Android"
+                  ipAddress: "102.22.44.11"
+                  recent:
+                    - event: "page_view"
+                      timestamp: "2025-11-14T12:00:00Z"
+
