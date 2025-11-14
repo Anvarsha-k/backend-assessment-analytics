@@ -1,20 +1,20 @@
-# Use official Node.js LTS image
+# Use official Node.js LTS
 FROM node:18
 
 # Set working directory
 WORKDIR /app
 
-# Copy package.json & package-lock.json
+# Copy package.json
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install --production
+# Install ALL dependencies (Render handles pruning itself)
+RUN npm install
 
-# Copy the app source code
+# Copy the rest of the code
 COPY . .
 
-# Expose app port
-EXPOSE 5000
+# Render will detect the port automatically
+EXPOSE 10000
 
-# Start the server
-CMD ["node", "src/server.js"]
+# Start the backend
+CMD ["npm", "start"]
