@@ -13,8 +13,5 @@ RUN npm install
 # Copy the rest of the code
 COPY . .
 
-# Render will detect the port automatically
-EXPOSE 10000
-
 # Start the backend
 CMD ["npm", "start"]
