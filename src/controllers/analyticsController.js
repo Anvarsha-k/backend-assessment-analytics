@@ -21,16 +21,25 @@ export const collect = async (req, res, next) => {
 
 export const getEventSummary = async (req, res, next) => {
   try {
-    const { event, startDate, endDate, app_id } = req.query;
-    const cacheKey = `eventSummary:${event || "all"}:${startDate || ""}:${endDate || ""}:${app_id || "all"}`;
-    const cached = await cache.get(cacheKey);
-    if (cached) return res.json(JSON.parse(cached));
+    const event = req.query.event || null;
+    const startDate = req.query.startDate || null;
+    const endDate = req.query.endDate || null;
+    const app_id = req.query.app_id || null;
 
-    const result = await analyticsService.eventSummary({ event, startDate, endDate, app_id });
-    await cache.set(cacheKey, JSON.stringify(result), 60);
-    res.json(result);
-  } catch (err) { next(err); }
+    const result = await analyticsService.eventSummary({
+      event,
+      startDate,
+      endDate,
+      app_id,
+    });
+
+    return res.json(result);
+  } catch (err) {
+    console.error("EVENT SUMMARY ERROR:", err);
+    return res.status(500).json({ error: "Internal server error" });
+  }
 };
+
 
 //Get user-level stats
 

@@ -16,5 +16,5 @@ const App = sequelize.define("App", {
   createdAt: "createdAt",
   updatedAt: "updatedAt"
 });
-
+  
 export default App;
