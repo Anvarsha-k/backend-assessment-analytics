@@ -67,7 +67,7 @@ paths:
                   apiKey:
                     type: string
 
-/api/auth/revoke:
+  /api/auth/revoke:
   post:
     summary: Revoke an API key to disable further usage
     description: |
