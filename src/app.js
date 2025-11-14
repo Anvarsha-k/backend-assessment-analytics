@@ -18,31 +18,47 @@ const swaggerDoc = yaml.load(path.join(__dirname, "../swagger.yaml"));
 const app = express();
 
 app.use(cors({
-origin: "*",
+  origin: "*",
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "x-api-key"]
 }));
+
 app.use(express.json());
 
-// Auth
+// ---------------------------
+// AUTH ROUTES
+// ---------------------------
 app.post("/api/auth/register", registerApp);
 app.get("/api/auth/api-key", getApiKey);
 app.post("/api/auth/revoke", revokeKey);
 
-// Analytics
+// ---------------------------
+// ANALYTICS ROUTES
+// ---------------------------
 app.post("/api/analytics/collect", apiKeyAuth, rateLimiterMiddleware, collect);
 app.get("/api/analytics/event-summary", apiKeyAuth, getEventSummary);
 app.get("/api/analytics/user-stats", apiKeyAuth, getUserStats);
 
-// Swagger UI
+// ---------------------------
+// SWAGGER
+// ---------------------------
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
-// health
+// ---------------------------
+// HEALTH CHECK
+// ---------------------------
 app.get("/health", (req, res) => res.json({ status: "ok" }));
 
-// error handler
+// ---------------------------
+// ERROR HANDLER (CORS SAFE)
+// ---------------------------
 app.use((err, req, res, next) => {
   console.error(err);
+
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, x-api-key");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+
   res.status(500).json({ error: err.message || "Internal server error" });
 });
 
