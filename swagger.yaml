@@ -67,28 +67,44 @@ paths:
                   apiKey:
                     type: string
 
-  /api/auth/revoke:
-    post:
-      summary: Revoke an API key to disable access
-      parameters:
-        - in: header
-          name: x-api-key
-          required: true
+/api/auth/revoke:
+  post:
+    summary: Revoke an API key to disable further usage
+    description: |
+      Revokes an existing API key. The API key must be provided in the request body.
+    requestBody:
+      required: true
+      content:
+        application/json:
           schema:
-            type: string
-      requestBody:
-        required: false
+            type: object
+            required:
+              - apiKey
+            properties:
+              apiKey:
+                type: string
+                example: "d214697e-580a-4382-b553-e0d8f4a47cb1-ec003b04"
+              reason:
+                type: string
+                example: "Key compromised"
+    responses:
+      "200":
+        description: API key revoked successfully
         content:
           application/json:
             schema:
               type: object
               properties:
-                reason:
+                message:
                   type: string
-                  example: "Key compromised"
-      responses:
-        "200":
-          description: API key revoked
+                  example: "API key revoked"
+      "400":
+        description: Missing apiKey
+        content:
+          application/json:
+            example:
+              error: "apiKey required"
+
 
   # -------------------------------
   # ANALYTICS ROUTES
