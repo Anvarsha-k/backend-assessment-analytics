@@ -31,9 +31,6 @@ paths:
                 name:
                   type: string
                   example: "My Product Website"
-                ownerEmail:
-                  type: string
-                  example: "user@example.com"
       responses:
         "201":
           description: Application registered successfully
