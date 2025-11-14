@@ -68,43 +68,42 @@ paths:
                     type: string
 
   /api/auth/revoke:
-  post:
-    summary: Revoke an API key to disable further usage
-    description: |
-      Revokes an existing API key. The API key must be provided in the request body.
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            required:
-              - apiKey
-            properties:
-              apiKey:
-                type: string
-                example: "d214697e-580a-4382-b553-e0d8f4a47cb1-ec003b04"
-              reason:
-                type: string
-                example: "Key compromised"
-    responses:
-      "200":
-        description: API key revoked successfully
+    post:
+      summary: Revoke an API key to disable further usage
+      description: |
+        Revokes an existing API key. The API key must be provided in the request body.
+      requestBody:
+        required: true
         content:
           application/json:
             schema:
               type: object
+              required:
+                - apiKey
               properties:
-                message:
+                apiKey:
                   type: string
-                  example: "API key revoked"
-      "400":
-        description: Missing apiKey
-        content:
-          application/json:
-            example:
-              error: "apiKey required"
-
+                  example: "d214697e-580a-4382-b553-e0d8f4a47cb1-ec003b04"
+                reason:
+                  type: string
+                  example: "Key compromised"
+      responses:
+        "200":
+          description: API key revoked successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "API key revoked"
+        "400":
+          description: Missing apiKey
+          content:
+            application/json:
+              example:
+                error: "apiKey required"
 
   # -------------------------------
   # ANALYTICS ROUTES
@@ -162,52 +161,51 @@ paths:
           description: Event collected successfully
 
   /api/analytics/event-summary:
-  get:
-    summary: Get event summary and aggregated analytics
-    parameters:
-      - in: header
-        name: x-api-key
-        required: true
-        schema:
-          type: string
-        example: "your-api-key-here"
-      - in: query
-        name: event
-        schema:
-          type: string
-          default: "all"
-          example: "login_button_click"
-      - in: query
-        name: app_id
-        schema:
-          type: string
-        example: "1"
-      - in: query
-        name: startDate
-        schema:
-          type: string
-          format: date
-        example: "2025-11-10"
-      - in: query
-        name: endDate
-        schema:
-          type: string
-          format: date
-        example: "2025-11-14"
-    responses:
-      "200":
-        description: Event summary retrieved
-        content:
-          application/json:
-            schema:
-              type: object
-              example:
-                event: "login_button_click"
-                count: 50
-                uniqueUsers: 18
-                deviceData:
-                  mobile: 40
-                  desktop: 10
+    get:
+      summary: Get event summary and aggregated analytics
+      parameters:
+        - in: header
+          name: x-api-key
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: event
+          schema:
+            type: string
+            default: "all"
+            example: "login_button_click"
+        - in: query
+          name: app_id
+          schema:
+            type: string
+            example: "1"
+        - in: query
+          name: startDate
+          schema:
+            type: string
+            format: date
+            example: "2025-11-10"
+        - in: query
+          name: endDate
+          schema:
+            type: string
+            format: date
+            example: "2025-11-14"
+      responses:
+        "200":
+          description: Event summary retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  event: "login_button_click"
+                  count: 50
+                  uniqueUsers: 18
+                  deviceData:
+                    mobile: 40
+                    desktop: 10
 
   /api/analytics/user-stats:
     get:
