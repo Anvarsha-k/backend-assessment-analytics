@@ -17,7 +17,11 @@ const swaggerDoc = yaml.load(path.join(__dirname, "../swagger.yaml"));
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "x-api-key"]
+}));
 app.use(express.json());
 
 // Auth
