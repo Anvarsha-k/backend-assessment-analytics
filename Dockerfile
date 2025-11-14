@@ -4,14 +4,17 @@ FROM node:18
 # Set working directory
 WORKDIR /app
 
-# Copy package.json
+# Copy package.json + lock files
 COPY package*.json ./
 
-# Install ALL dependencies (Render handles pruning itself)
-RUN npm install
+# Install dependencies
+RUN npm install --production
 
-# Copy the rest of the code
+# Copy entire source
 COPY . .
+
+# Expose Render's port (Render sets PORT env)
+EXPOSE 10000
 
 # Start the backend
 CMD ["npm", "start"]
