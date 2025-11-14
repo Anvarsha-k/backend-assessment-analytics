@@ -8,7 +8,7 @@ info:
 servers:
   - url: http://localhost:5000
     description: Local development server
-  - url: https://backend-assessment-analytics.onrender.com
+  - url: https://backend-assessment-analytics-1.onrender.com
     description: Production Server
 
 paths:
