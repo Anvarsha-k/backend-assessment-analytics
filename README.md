@@ -144,11 +144,11 @@ User Stats
 GET /api/analytics/user-stats?userId=user123
 
 🚀 Deployment URL
-https://backend-assessment-analytics.onrender.com
+https://backend-assessment-analytics-1.onrender.com
 
 🎥 Loom Demo
 
-https://www.loom.com/share/5ea592d457c64ad0be30867414bd8aa7
+https://www.loom.com/share/7901cbbd433a44acbb4395914228d872
 
 📌 Challenges Solved
 
