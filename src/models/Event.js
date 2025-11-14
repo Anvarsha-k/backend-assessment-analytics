@@ -31,7 +31,7 @@ const Event = sequelize.define("Event", {
   ]
 });
 
-// relations
+
 App.hasMany(Event, { foreignKey: "appId", onDelete: "CASCADE" });
 Event.belongsTo(App, { foreignKey: "appId" });
 

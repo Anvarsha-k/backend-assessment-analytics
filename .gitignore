@@ -1,0 +1,9 @@
+node_modules/
+.env
+uploads/
+.vscode/
+logs/
+*.log
+*.pid
+tests/
+docker-compose.override.yml
