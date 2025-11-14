@@ -8,13 +8,14 @@ info:
 servers:
   - url: http://localhost:5000
     description: Local development server
+  - url: https://backend-assessment-analytics.onrender.com
+    description: Production Server
 
 paths:
-
   # -------------------------------
   # AUTH ROUTES
   # -------------------------------
-  
+
   /api/auth/register:
     post:
       summary: Register a new application and generate an API key
@@ -220,4 +221,3 @@ paths:
                   recent:
                     - event: "page_view"
                       timestamp: "2025-11-14T12:00:00Z"
-
